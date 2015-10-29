@@ -1,216 +1,288 @@
-# Ruby Warrior (i18n-ed version)
+# RUBY AI WORKSHOP - Ruby Warrior
 
-This is a game designed to teach the Ruby language and artificial intelligence in a fun, interactive way.
+## Ruby Hack Night
+## October 28, 2015
 
-You play as a warrior climbing a tall tower to reach the precious Ruby at the top level. On each floor you need to write a Ruby script to instruct the warrior to battle enemies, rescue captives, and reach the stairs. You have some idea of what each floor contains, but you never know for certain what will happen. You must give the Warrior enough artificial intelligence up-front to find his own way.
+---
 
-**NOTE**: The player directory structure changed on July 18, 2009. If you have an old profile using the "level-00*" structure then move the contents of the last level into the parent directory.
+## Why this project?
+This workshop integrates many of our past learnings with AI techniques.
 
-# i18n-ed version
+## Approach
+* You may use any techniques you wish to use.
+* My recommendation is to pair program and follow the TDD workflow (fail test, write minimum code required to pass, pass test, refactor).
+* Before writing code, discuss strategies based on your observations.
+* Each time you pass, you have the option to progress to the next level.
+* You develop skills and abilities as you progress, so RTFR!
 
-This is an exact copy of the Ryan Bates' game but I implemented [i18n](http://en.wikipedia.org/wiki/Internationalization_and_localization) to be easily translated and to use it in [KidsRuby](https://github.com/hybridgroup/kidsruby).
+* You may find debugging and introspection to be powerful techniques.
 
-This version includes english as one of the currently supported languages, so `rubywarriorwarrior-i18n` in english and the official game are exactly the same.
+---
+## 60-second AI primer
+_Q._ What is AI (artificial intelligence)?  
+_A._ It is the science and engineering of making intelligent machines, especially intelligent computer programs. It is related to the similar task of using computers to understand human intelligence, but AI does not have to confine itself to methods that are biologically observable.
 
-Currently supported languages:
+_Q._ Yes, but what is intelligence?  
+_A._ Intelligence is the computational part of the ability to achieve goals in the world. Varying kinds and degrees of intelligence occur in people, many animals and some machines.
 
-* English
-* Spanish
+_Q._ Isn't AI about simulating human intelligence?  
+_A._ Sometimes, but not always. On the one hand, we can learn something about how to make machines solve problems by observing other people or just by observing our own methods. On the other hand, most work in AI involves studying the problems the world presents to intelligence rather than studying people or animals. AI researchers are free to use methods that are not observed in people or that involve much more computing than people can do.
 
-If you want to translate `ruby-warrior-i18n` to your native language feel free to do it, here are the instructions:
+_Q._ Does AI aim to put the human mind into the computer?  
+_A._ Some researchers say they have that objective, but they are probably using the phrase metaphorically. The human mind has a lot of peculiarities, and I'm not sure anyone is serious about imitating all of them.
 
-* Fork this repo
-* Create a topic branch named after the name of your language in english (ie. japanese, german, french)
-* Create a yml file in the `i18n/` folder named after your languages' [two-letter code](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes#Partial_ISO_639_table)
-* Run `rubywarrior` using your language, e.g. `$ LANG=es ./bin/rubywarrior`
-* Make a pull request
+---
 
-ruby-warrior-i18n takes advantage of the R18n-desktop gem to select the language from the user locales, if you want to test with a different language without specifying the `LANG` environment variable, here's how to change them:
+## 10-second AI primer
+_Q._ What is AI?  
+_A_. AI is the ability of a machine (usually software) to achieve goals through decision-making.
 
-### Mac OS X
+---
 
-Drag the language to the top of the list in:
+## Workshop setup steps
+#### 1. Create a project directory
+    % mkdir ruby-warrior
+    % cd !$
 
-	System Preferences > Languages and Text > Language tab
+#### (optional) 2. Set Ruby version and gemset for Rbenv/RVM
+_IMPORTANT: Ruby must be < 2.2!_
 
-### Linux
+If you’re using Rbenv, run:
 
-	?
-	
-### Windows
+    % echo 2.1.7 > .rbenv-version
+    % echo rubywarrior > .rbenv-gemsets
 
-	?
+#### 3. Install the gem
+    % gem install rubywarrior-i18n
 
-## Getting Started
+If you’re using Rbenv, run:
 
-First install the gem.
+    % rbenv rehash
 
-	gem install rubywarrior-i18n
+#### 4. Initialize the workshop files
+    % rubywarrior
 
-Then run the `rubywarrior` command to setup your profile. This will create a `rubywarrior/` directory in your current location where you will find a `player.rb` file in your profile's directory containing this:
+* create a new directory with a “beginner” tower  
+* name your warrior
 
-	class Player
-	  def play_turn(warrior)
-	    # your code goes here
-	  end
-	end
+#### 5. Move into the new subdirectory
+If you don’t do this, it will ask you which profile toplay each time:
 
-Your objective is to fill this `play_turn` method with commands to instruct the warrior what to do. With each level your abilities will grow along with the difficulty. See the `README` in your profile's directory for details on what abilities your warrior has available on the current level.
+    % cd <TAB><TAB>
 
-Here is a simple example which will instruct the warrior to attack if he feels an enemy, otherwise he will walk forward.
+---
 
-	class Player
-	  def play_turn(warrior)
-	    if warrior.feel.enemy?
-	      warrior.attack!
-	    else
-	      warrior.walk!
-	    end
-	  end
-	end
+## Workshop process
 
-Once you are done editing `player.rb`, save the file and run the `rubywarrior` command again to start playing the level. The play happens through a series of turns. On each one, your `play_turn` method is called along with any enemy's.
+We will do several iterations of the following process. Follow it carefully to ensure success!
 
-You cannot change your code in the middle of a level. You must take into account everything that may happen on that level and give your warrior the proper instructions from the start.
+#### 1. Read the README
+_IMPORTANT: Actually do this step as it provides important hints and tips (the README file updates every time you progress to the next level)_
 
-Losing all of your health will cause you to fail the level. You are not punished by this, you simply need to go back to your `player.rb`, improve your code, and try again.
+    % cat README.rdoc
 
-Once you pass a level (by reaching the stairs), the profile `README` will be updated for the next level. Alter the `player.rb` file and run `rubywarrior` again to play the next level.
+#### 2. Test your current code to prove that it fails
+    % rubywarrior
+_*(failure)*_
 
-## Scoring
+#### 3. Infer new strategies from the hints provided by the README and test output
 
-Your objective is to not only reach the stairs, but to get the highest score you can. There are many ways you can earn points on a level.
+* Discuss this with your pair
 
-* defeat an enemy to add his max health to your score
-* rescue a captive to earn 20 points
-* pass the level within the bonus time to earn the amount of bonus time remaining
-* defeat all enemies and rescue all captives to receive a 20% overall bonus
+#### 4. Update your solution
 
-A total score is kept as you progress through the levels. When you pass a level, that score is added to your total.
+#### 5. Test your new code. If not working, go back to 4.
+    % rubywarrior
+_*(working)*_
 
-Don't be too concerned about scoring perfectly in the beginning. After you reach the top of the tower you will be able to re-run the tower and fine-tune your warrior to get the highest score. See the Epic Mode below for details.
+* Answer “n” to the final question
 
-## Perspective
+#### 6. Refactor your solution (don’t forget to use multiple class and files!)
 
-Even though this is a text-based game, think of it as two-dimensional where you are viewing from overhead. Each level is always rectangular in shape and is made up of a number of squares. Only one unit can be on a given square at a time, and your objective is to find the square with the stairs. Here is an example level map and key.
+#### 7. Re-test your refactored code
+    % rubywarrior
+_*(working)*_
 
-	 ----
-	|C s>|
-	| S s|
-	|C @ |
-	 ----
+* Answer “y” to the final question
 
-	> = Stairs
-	@ = Warrior (20 HP)
-	s = Sludge (12 HP)
-	S = Thick Sludge (24 HP)
-	C = Captive (1 HP)
+#### 8. Go back to 1
 
+---
 
-## Commanding the Warrior
+## Level 1
+You see before yourself a long hallway with stairs at the end. There is nothing in the way.
 
-When you first start, your warrior will only have a few abilities, but with each level your abilities will grow. A warrior has two kinds of abilities: actions and senses.
+Tip: Call ```warrior.walk!``` to walk forward in the ```Player#play_turn``` method.
 
-An action is something that effects the game in some way. You can easily tell an action because it ends in an exclamation mark. Only one action can be performed per turn, so choose wisely. Here are some examples of actions.
 
-	warrior.walk!
-	  Move in given direction (forward by default).
+```
+--------
+|@      >|
+ --------
 
-	warrior.attack!
-	  Attack the unit in given direction (forward by default).
+> = Stairs
+@ = Frodo (20 HP)
+```
 
-	warrior.rest!
-	  Gain 10% of max health back, but do nothing more.
+### Warrior Abilities
 
-	warrior.bind!
-	  Bind unit in given direction to keep him from moving (forward by default).
+##### [NEW]
+    warrior.walk!
+> Move in the given direction (forward by default).
 
-	warrior.rescue!
-	  Rescue a captive from his chains (earning 50 points) in given direction (forward by default).
+---
 
+## Hints for Level 1
+* Follow the TDD workflow.
 
-A sense is something which gathers information about the floor. You can perform senses as often as you want per turn to gather information about your surroundings and to aid you in choosing the proper action. Senses do NOT end in an exclamation mark.
+---
 
-	warrior.feel
-	  Returns a Space for the given direction (forward by default).
+## Level 2
+It is too dark to see anything, but you smell sludge nearby.
 
-	warrior.health
-	  Returns an integer representing your health.
+Tip: Use ```warrior.feel.empty?``` to see if there is anything in front of you, and ```warrior.attack!``` to fight it. Remember, you can only do one action (ending in !) per turn.
 
-	warrior.distance
-	  Returns the number of spaces the stairs are away.
+```
+ --------
+ |@   s  >|
+ --------
 
-	warrior.listen
-	  Returns an array of all spaces which have units in them.
+ > = Stairs
+ @ = Frodo (20 HP)
+ s = Sludge (12 HP)
+```
 
+### Warrior Abilities
+##### [NEW]
+    warrior.feel
+> Returns a Space for the given direction (forward by default).
 
-Since what you sense will change each turn, you should record what information you gather for use on the next turn. For example, you can determine if you are being attacked if your health has gone down since the last turn.
+    warrior.attack!
+> Attacks a unit in given direction (forward by default).
 
-## Spaces
+##### [EXISTING]
+    warrior.walk!
+> Move in the given direction (forward by default).
 
-Whenever you sense an area, often one or multiple spaces (in an array) will be returned. A space is an object representing a square in the level. You can call methods on a space to gather information about what is there. Here are the various methods you can call on a space.
+---
 
-	space.empty?
-	  If true, this means that nothing (except maybe stairs) is at this location and you can walk here.
+## Hints for Level 2
+* Remember, you're working in Ruby here. Don't simply fill up the ```play_turn``` method with a lot of code. Organize it with methods and classes. The player directory is set up as a load path so you can include other ruby files from your player.rb file.
 
-	space.stairs?
-	  Determine if stairs are at that location
+* If you ever get stuck on a level, review the ```README``` documentation and be sure you're trying each ability out.
 
-	space.enemy?
-	  Determine if an enemy unit is at this location.
+* Make sure to try the different options you can pass to the rubywarrior command. Run ```rubywarrior –help``` to see them all.
 
-	space.captive?
-	  Determine if a captive is at this location.
+* To run with no delay between steps:
+```
+    % rubywarrior -t 0
+```
 
-	space.wall?
-	  Returns true if this is the edge of the level. You can't walk here.
+* *POWER TIP: The Space object returned by Warrior#feel can answer some interesting questions!*
 
-	space.ticking?
-	  Returns true if this space contains a bomb which will explode in time.
+---
 
-	space.golem?
-	  Returns true if a golem is occupying this space.
+## Level 3
+The air feels thicker than before. There must be a horde of sludge.
 
-You will often call these methods directly after a sense. For example, the "feel" sense returns one space. You can call "captive?" on this to determine if a captive is in front of you.
+Tip: Be careful not to die! Use ```warrior.health``` to keep an eye on your health, and ```warrior.rest!``` to earn 10% of max health back.
 
-	warrior.feel.captive?
+```
+---------
+ |@ s ss s>|
+ ---------
 
-## Golem
+ > = Stairs
+ @ = Frodo (20 HP)
+ s = Sludge (12 HP)
+```
 
-Along your journey you may discover the ability to create a golem. This is a separate unit which you also control. The turn handling is done through a block. Here is an example.
+### Warrior Abilities
+##### [NEW]
+    warrior.health
+> Returns an integer representing your health.
 
-	warrior.form! do |golem|
-	  golem.attack! if golem.feel.enemy?
-	end
 
-Complex logic can be placed in this block just like in the player turn method. You may want to move the logic into its own class or create multiple classes for different types of golems. You can create multiple golems in a level, but each one will take half of the warrior's health.
+    warrior.rest!
+> Gain 10% of max health back, but do nothing more.
 
-## Epic Mode
-  
-Once you reach the top of the tower, you will enter epic mode. When running `rubywarrior` again it will run your current `player.rb` through all levels in the tower without stopping.
+##### [EXISTING]
+    warrior.feel
+> Returns a Space for the given direction (forward by default).
 
-Your warrior will most likely not succeed the first time around, so use the `-l` option on levels you are having difficulty or want to fine-tune the scoring.
+    warrior.attack!
+> Attacks a unit in given direction (forward by default).
 
-	rubywarrior -l 3
+    warrior.walk!
+> Move in the given direction (forward by default).
 
-Once your warrior reaches the top again you will receive an average grade, along with a grade for each level. The grades from best to worst are S, A, B, C, D and F. Try to get S on each level for the ultimate score.
+---
 
-Note: I'm in the process of fine-tuning the grading system. If you find the "S" grade to be too easy or too difficult to achieve on a given level, please add an issue for this on GitHub.
+## Hints for Level 3
+* If you get low on health be sure to ```rest!``` when no enemy is near.
 
-## Tips
+* Sludges do 3 HP damage per round.
 
-If you ever get stuck on a level, review the `README` documentation and be sure you're trying each ability out. If you can't keep your health up, be sure to `rest` when no enemy is around (while keeping an eye on your health). Also, try to use far-ranged weapons whenever possible (such as the bow).
+* ```warrior.walk!``` can take a direction!
 
-Remember, you're working in Ruby here. Don't simply fill up the `play_turn` method with a lot of code. Organize it with methods and classes. The player directory is set up as a load path so you can include other ruby files from your `player.rb` file.
+* *POWER TIP: Use a debugger to develop code fast*
 
-Senses are cheap, so use them liberally. Store the sensed information to help you better determine what actions to take in the future.
+```
+% gem install byebug
+```
+> insert ```require ‘byebug’``` at top of player.rb  
+> insert ```byebug``` at point of importance  
 
-Running `rubywarrior` while you are in your profile directory will auto-select that profile so you don't have to each time.
+```
+% gem install pry-byebug
+```
+> insert ```require ‘pry-byebug’``` at top of player.rb  
+> insert ```binding.pry``` at point of importance
 
-If you're aiming for points, remember to sweep the area. Even if you're close to the stairs, don't go in until you've gotten everything (if you have the health). Use far-ranged senses (such as look and listen) to determine if there are any enemies left.
+---
 
-Make sure to try the different options you can pass to the `rubywarrior` command. Run `rubywarrior --help` to see them all.
+## Level 4
+You can hear bow strings being stretched.
 
-## TODO
+Tip: No new abilities this time, but you must be careful not to rest while taking damage. Save a ```@health``` instance variable and compare it on each turn to see if you're taking damage.
 
-Implement i18n in cucumber and rspec tests
+```
+ -------
+ |@ Sa S>|
+ -------
+
+ > = Stairs
+ @ = Frodo (20 HP)
+ S = Thick sludge (24 HP)
+ a = Archer (7 HP)
+```
+
+## Warrior Abilities
+##### [EXISTING]
+    warrior.health
+> Returns an integer representing your health.
+
+    warrior.rest!
+> Gain 10% of max health back, but do nothing more.
+
+    warrior.feel
+> Returns a Space for the given direction (forward by default).
+
+    warrior.attack!
+> Attacks a unit in given direction (forward by default).
+
+    warrior.walk!
+> Move in the given direction (forward by default).
+
+---
+
+## Hints for Higher Levels
+* Try to use far-ranged weapons whenever possible (such as the bow).
+
+* Senses are cheap, so use them liberally. Store the sensed information to help you better determine what actions to take in the future.
+
+* If you're aiming for points, remember to sweep the area. Even if you're close to the stairs, don't go in until you've gotten everything (if you have the health). Use far-ranged senses (such as look and listen) to determine if there are any enemies left.
+
+---
+
+# Finally, good luck and have fun!
